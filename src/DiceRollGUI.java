@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,20 +21,20 @@ import javax.swing.table.DefaultTableModel;
  */
 
 public class DiceRollGUI extends javax.swing.JFrame {
-    //Don't know if necessary
+    //Fields
     private int numOfRolls = 0;
     private int dice1RNG = 0;
     private int dice2RNG = 0;
     private int dice3RNG = 0;
     private int diceSumIteration = 0;
-    
-    //Needed
     private int totalDiceSum = 0;
+    private int iterationCount = 0;
     private int[] rngFrequency = new int[18]; //18 dots, but results 1 and 2 are not possible to roll. (15) 
     private boolean isResetChecked;
-    
-    //Objects
     public LoginCheck login = new LoginCheck();
+    String imageLocation = "src//imageFiles//";
+    String[] diceNames = {imageLocation+"dice1.png",imageLocation+"dice2.png",imageLocation+"dice3.png",imageLocation+"dice4.png",imageLocation+"dice5.png",imageLocation+"dice6.png"};
+    
     
     /**
      * Creates new form NewJFrame
@@ -56,12 +57,9 @@ public class DiceRollGUI extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         rollButton = new javax.swing.JButton();
-        dice1Text = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        dice2Text = new javax.swing.JTextField();
-        dice3Text = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         resultsTable = new javax.swing.JTable();
         saveTableButton = new javax.swing.JCheckBox();
@@ -82,6 +80,9 @@ public class DiceRollGUI extends javax.swing.JFrame {
         signOutButton = new javax.swing.JButton();
         signInStatus = new javax.swing.JLabel();
         passwordField = new javax.swing.JPasswordField();
+        diceImage2 = new javax.swing.JLabel();
+        diceImage3 = new javax.swing.JLabel();
+        diceImage1 = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -97,7 +98,7 @@ public class DiceRollGUI extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Dice Roll Frequency");
+        setTitle("DiceRollUI");
         setFocusable(false);
         setResizable(false);
 
@@ -108,38 +109,11 @@ public class DiceRollGUI extends javax.swing.JFrame {
             }
         });
 
-        dice1Text.setEditable(false);
-        dice1Text.setText("0");
-        dice1Text.setFocusable(false);
-        dice1Text.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dice1TextActionPerformed(evt);
-            }
-        });
-
         jLabel1.setText("Dice #1");
 
         jLabel2.setText("Dice #3");
 
         jLabel3.setText("Dice #2");
-
-        dice2Text.setEditable(false);
-        dice2Text.setText("0");
-        dice2Text.setFocusable(false);
-        dice2Text.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dice2TextActionPerformed(evt);
-            }
-        });
-
-        dice3Text.setEditable(false);
-        dice3Text.setText("0");
-        dice3Text.setFocusable(false);
-        dice3Text.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dice3TextActionPerformed(evt);
-            }
-        });
 
         resultsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -304,6 +278,12 @@ public class DiceRollGUI extends javax.swing.JFrame {
             }
         });
 
+        diceImage2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imageFiles/defaultDice.png"))); // NOI18N
+
+        diceImage3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imageFiles/defaultDice.png"))); // NOI18N
+
+        diceImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imageFiles/defaultDice.png"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -325,17 +305,20 @@ public class DiceRollGUI extends javax.swing.JFrame {
                             .addComponent(clearResultsTableButton, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(bottomTableButton, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(31, 31, 31))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(dice3Text, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(96, 96, 96)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(bottomTableButton, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(31, 31, 31))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(96, 96, 96))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(diceImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(66, 66, 66)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
@@ -352,36 +335,38 @@ public class DiceRollGUI extends javax.swing.JFrame {
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(164, 164, 164))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(dice1Text, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(90, 90, 90)))
-                        .addGap(48, 48, 48)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dice2Text, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(589, 589, 589))
+                        .addGap(37, 37, 37)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(600, 600, 600))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(719, 719, 719)
-                                .addComponent(saveTableButton))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(rollButton, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(50, 50, 50)
-                                .addComponent(clearTableButton, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(106, 106, 106))
+                        .addComponent(rollButton, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addComponent(clearTableButton, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(568, 568, 568))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(userNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(47, 47, 47)
-                        .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(signOutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(47, 47, 47))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(diceImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(85, 85, 85)
+                                .addComponent(diceImage2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(userNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(47, 47, 47)
+                                .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(signOutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(47, 47, 47))))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(saveTableButton)
+                .addGap(124, 124, 124))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -401,11 +386,11 @@ public class DiceRollGUI extends javax.swing.JFrame {
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(78, 78, 78)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(dice1Text, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dice2Text, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dice3Text, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(41, 41, 41)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(diceImage2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(diceImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(diceImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(bottomTableButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -425,12 +410,12 @@ public class DiceRollGUI extends javax.swing.JFrame {
                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(signInStatus))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(deleteRowButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(fileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(clearResultsTableButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10))
@@ -448,18 +433,11 @@ public class DiceRollGUI extends javax.swing.JFrame {
             theTable.setValueAt(index + 1, index - 2, 0);
             theTable.setValueAt("-",index - 2,1);
         }
+        diceImage1.setIcon(new ImageIcon(imageLocation + "defaultDice.png"));
+        diceImage2.setIcon(new ImageIcon(imageLocation + "defaultDice.png"));
+        diceImage3.setIcon(new ImageIcon(imageLocation + "defaultDice.png"));
+        iterationCount = 0;
     }
-    
-    /*
-    private void showResultsArray() {
-        //DefaultTableModel theTable = (DefaultTableModel)resultsTable.getModel();
-        for(int index = 2; index < rngFrequency.length; index++) {
-            System.out.printf("%d): %d \t",index + 1,rngFrequency[index]);
-            //theTable.setValueAt(rngFrequency[index], index - 2, 1);
-        }
-        System.out.println();
-    }
-    */
     
     private void setFolders() {
         try {
@@ -469,7 +447,6 @@ public class DiceRollGUI extends javax.swing.JFrame {
             while((line = br.readLine()) != null) {
                 String[] tokens = line.split(":");
                 File newFolder = new File(directory+tokens[0]);
-                //System.out.println(tokens[0]);
                 newFolder.mkdir();
             }
             File newFolder = new File(directory+"GUEST_USER");
@@ -482,9 +459,6 @@ public class DiceRollGUI extends javax.swing.JFrame {
     private void resetForLogin() {
         DefaultTableModel theTable = (DefaultTableModel)allResultsTable.getModel();
         setTable();
-        dice1Text.setText("0");
-        dice2Text.setText("0");
-        dice3Text.setText("0");
         clearTableButton.setEnabled(false);
         bottomTableButton.setEnabled(false);
         theTable.setRowCount(0);
@@ -493,21 +467,12 @@ public class DiceRollGUI extends javax.swing.JFrame {
         clearResultsTableButton.setEnabled(false);
         this.isResetChecked = false;
         saveTableButton.setSelected(false);
+        
+        if(!login.isLoggedIn) {
+            userNameField.setText("");
+            passwordField.setText("");  
+        }
     }
-    
-    //UI DEFINED METHODS
-    private void dice1TextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dice1TextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dice1TextActionPerformed
-
-    private void dice2TextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dice2TextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dice2TextActionPerformed
-
-    private void dice3TextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dice3TextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dice3TextActionPerformed
-
     
     private void rollButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rollButtonActionPerformed
         // TODO add your handling code here:
@@ -526,17 +491,20 @@ public class DiceRollGUI extends javax.swing.JFrame {
        userNameField.setEnabled(false);
        passwordField.setEnabled(false);
        String userRolls = "";
-       
-       
-       if(this.isResetChecked) { //Resets table for each round if "reset each roll" is checked.
-           System.out.println("RESET");
-           setTable();
-       }
-       
-       
+
        try { //Entire process of rolling; user enters number and takes the sum of three dices and indexes the array with the sum to increment one.
-            userRolls = JOptionPane.showInputDialog("Enter Number of Rolls: ");
+            userRolls = JOptionPane.showInputDialog("Enter Number of Rolls (Max 100 rolls at a time): ");
             numOfRolls = Integer.parseInt(userRolls);
+            
+            if(this.isResetChecked) { //Resets table for each round if "reset each roll" is checked.
+                System.out.println("RESET");
+                setTable();
+            }
+       
+            if(numOfRolls <= 0 || numOfRolls > 100) {
+                throw new NumberFormatException();
+            }
+            
             stopRollsButton.setEnabled(true);
             Timer timer = new Timer(); //Loop by importing a timer from the Timer and TimerTask class.
             TimerTask task = new TimerTask() {
@@ -547,15 +515,15 @@ public class DiceRollGUI extends javax.swing.JFrame {
                     dice1RNG = rand.nextInt(1,7);
                     dice2RNG = rand.nextInt(1,7);
                     dice3RNG = rand.nextInt(1,7);
+                    diceImage1.setIcon(new ImageIcon(diceNames[dice1RNG - 1]));
+                    diceImage2.setIcon(new ImageIcon(diceNames[dice2RNG - 1]));
+                    diceImage3.setIcon(new ImageIcon(diceNames[dice3RNG - 1]));
                     diceSumIteration = dice1RNG + dice2RNG + dice3RNG;
-                    rngFrequency[diceSumIteration - 1]++; 
-                    dice1Text.setText(dice1RNG+"");
-                    dice2Text.setText(dice2RNG+"");
-                    dice3Text.setText(dice3RNG+"");
+                    rngFrequency[diceSumIteration - 1]++;
+                    iterationCount++;
                     theTable.setValueAt(rngFrequency[diceSumIteration - 1], diceSumIteration - 3, 1);
                     if(numOfRolls <= 0 || stopRollsButton.isEnabled() == false)  { //Re-enables buttons after each round.
                         boolean bool = false;
-                        boolean loggedIn = login.isLoggedIn;
                         System.out.println("DONE ROLLING");
                         timer.cancel();
                         rollButton.setEnabled(true);
@@ -569,20 +537,14 @@ public class DiceRollGUI extends javax.swing.JFrame {
                             bool = true;
                         }
 
-                        if(login.isLoggedIn) {
-                            loggedIn = true;
-                        }else {
-                            loggedIn = false;
-                        }
-                       
-                        loginButton.setEnabled(!loggedIn);
-                        signOutButton.setEnabled(loggedIn);
+                        loginButton.setEnabled(!login.isLoggedIn);
+                        signOutButton.setEnabled(login.isLoggedIn);
                         rollsRemainingText.setText("Rolls Remaining: 0");
                         deleteRowButton.setEnabled(bool);
                         clearResultsTableButton.setEnabled(bool);
                         fileButton.setEnabled(bool);
-                        userNameField.setEnabled(true);
-                        passwordField.setEnabled(true);
+                        userNameField.setEnabled(!login.isLoggedIn);
+                        passwordField.setEnabled(!login.isLoggedIn);
                         bottomTableButton.setEnabled(true);
                     }
                };
@@ -591,39 +553,37 @@ public class DiceRollGUI extends javax.swing.JFrame {
        }catch(NumberFormatException error) { 
           //When there is an error when the user inputs a number.
           boolean bool = false;
-          boolean loggedIn = login.isLoggedIn;
-          JOptionPane.showMessageDialog(rootPane, "ERROR: The input given is invalid.");
-          rollButton.setEnabled(true);
-          clearTableButton.setEnabled(true);
-          bottomTableButton.setEnabled(true);
-          userNameField.setEnabled(true);
-          passwordField.setEnabled(true);
+          boolean bool2 = false;
           
-          if(bottomTable.getRowCount() <= 0) {
+         if(bottomTable.getRowCount() <= 0) { //Bottom Table Check
               bool = false;
           }else {
               bool = true;
           }
           
-          if(login.isLoggedIn) {
-            loggedIn = true;
+          if(iterationCount > 0) { //Roll Table Check
+              bool2 = true;
           }else {
-            loggedIn = false;
+              bool2 = false;
           }
+           
+          if(userRolls != null){JOptionPane.showMessageDialog(rootPane, "The input given is invalid.","Input",2);}
+          rollButton.setEnabled(true);
+          clearTableButton.setEnabled(bool2);
+          bottomTableButton.setEnabled(bool2);
+          userNameField.setEnabled(!login.isLoggedIn);
+          passwordField.setEnabled(!login.isLoggedIn);
           
-          System.out.println(deleteRowButton.isEnabled());
           deleteRowButton.setEnabled(bool);
           fileButton.setEnabled(bool);
           clearResultsTableButton.setEnabled(bool);
-          loginButton.setEnabled(!loggedIn);
-          signOutButton.setEnabled(loggedIn);
-          bottomTableButton.setEnabled(bottomTableButton.isEnabled());
+          loginButton.setEnabled(!login.isLoggedIn);
+          signOutButton.setEnabled(login.isLoggedIn);
        }
     }//GEN-LAST:event_rollButtonActionPerformed
 
     private void saveTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveTableButtonActionPerformed
         // TODO add your handling code here:
-        
         //Checkbox to check to reset top table for each round.
         this.isResetChecked = saveTableButton.isSelected();
         System.out.println("PRESSED: "+saveTableButton.isSelected());
@@ -632,15 +592,15 @@ public class DiceRollGUI extends javax.swing.JFrame {
     private void clearTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearTableButtonActionPerformed
         // TODO add your handling code here:
         //Resets the table when the reset button is pressed.
-        int option = JOptionPane.showConfirmDialog(rootPane, "Are you sure you want to reset the table?", "Reset Table?", 2);
+        int option = JOptionPane.showConfirmDialog(rootPane, "Are you sure you want to reset the table?", "Clear Table", 2);
         if(option == 0) {
             setTable();
-            dice1Text.setText("0");
-            dice2Text.setText("0");
-            dice3Text.setText("0");
+            diceImage1.setIcon(new ImageIcon(imageLocation + "defaultDice.png","0"));
+            diceImage2.setIcon(new ImageIcon(imageLocation + "defaultDice.png"));
+            diceImage3.setIcon(new ImageIcon(imageLocation + "defaultDice.png"));
             clearTableButton.setEnabled(false);
             bottomTableButton.setEnabled(false);
-            JOptionPane.showMessageDialog(rootPane, "Table has been cleared!");
+            JOptionPane.showMessageDialog(rootPane, "Table has been cleared!","Clear Table",1);
         }
     }//GEN-LAST:event_clearTableButtonActionPerformed
 
@@ -668,9 +628,14 @@ public class DiceRollGUI extends javax.swing.JFrame {
         
         try { //Iterating through the entire bottom table to store the results to the file.
             if(allResultsTable.getRowCount() > 0) {
-                String inputFileName = JOptionPane.showInputDialog(rootPane, "Enter the name of your file. (This will create a .txt and .csv file)", "File Name", 1);
-                if(inputFileName == null) {return;}else if(inputFileName.equals("")){inputFileName = "file";}
-                //BufferedWriter bw = new BufferedWriter(new FileWriter("src//" + inputFileName +".txt"));
+                String inputFileName = JOptionPane.showInputDialog(rootPane, "Enter the name of your file. (This will create a .txt and .csv file)", "File Saving", 1);
+                
+                if(inputFileName == null) {
+                    return;
+                }else if(inputFileName.equals("")){
+                    inputFileName = "file";
+                }
+                
                 BufferedWriter bw = new BufferedWriter(new FileWriter(folderDirectory + inputFileName +".txt"));
                 BufferedWriter csvWrite = new BufferedWriter(new FileWriter(folderDirectory + inputFileName + ".csv"));
                 System.out.println(intro);
@@ -703,14 +668,13 @@ public class DiceRollGUI extends javax.swing.JFrame {
                            allResultsTable.getValueAt(index,15)+"");
                            csvWrite.write(writeCSV);
                 }
-                        System.out.println("File Written!");
-                        bw.close();
-                        csvWrite.close();
-                        JOptionPane.showMessageDialog(rootPane, "File successfully saved!");
+                System.out.println("File Written!");
+                bw.close();
+                csvWrite.close();
+                JOptionPane.showMessageDialog(rootPane, "File successfully saved!","File Saving",1);      
             }else {
                 //Doesn't add anything to file if there is nothing on the table.
-                System.out.println("Nothing on table");
-                JOptionPane.showMessageDialog(rootPane, "Nothing to save on the table!");
+                JOptionPane.showMessageDialog(rootPane, "Nothing to save on the table!","Save Table",1);
             }
         }catch(IOException e) {
             System.out.println("ERROR: File Not Found");
@@ -720,19 +684,16 @@ public class DiceRollGUI extends javax.swing.JFrame {
     private void bottomTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bottomTableButtonActionPerformed
         // TODO add your handling code here:
         DefaultTableModel bottomTable = (DefaultTableModel)allResultsTable.getModel();
-        //DefaultTableModel topTable = (DefaultTableModel)resultsTable.getModel();
         String[] row = new String[16]; //Array representing a row to add to the bottom table.
         System.out.println("Adding results to table.");
         
         //Transfers values by iterating from the top table to the bottom table, replacing dashes with 0.
         for(int index = 0; index < resultsTable.getRowCount(); index++) {
             if(resultsTable.getValueAt(index, 1).toString().equals("-")) {
-                //System.out.println("ZERO FOUND at: " +index );
                 row[index] = "0";
             }else{
                 row[index] = resultsTable.getValueAt(index,1)+"";
             }
-            //System.out.println(row[index]);
         }
         
         bottomTable.addRow(row);
@@ -743,24 +704,23 @@ public class DiceRollGUI extends javax.swing.JFrame {
         }
         setTable();
         bottomTableButton.setEnabled(false);
+        clearTableButton.setEnabled(false);
     }//GEN-LAST:event_bottomTableButtonActionPerformed
 
     private void deleteRowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteRowButtonActionPerformed
         // TODO add your handling code here:
         DefaultTableModel theTable = (DefaultTableModel)allResultsTable.getModel();
         
-        
         //Deletes a row from the bottom table as long as the row count is greater than zero.
-        System.out.println(allResultsTable.getSelectedRow());
         if(allResultsTable.getRowCount() > 0 && allResultsTable.isRowSelected(allResultsTable.getSelectedRow())) {
-            int deleteConfirmation = JOptionPane.showConfirmDialog(rootPane, "Are you sure you want to delete this row?");
+            int deleteConfirmation = JOptionPane.showConfirmDialog(rootPane, "Are you sure you want to delete this row?","Delete Row",2,1);
            
             if(deleteConfirmation == 0) {
                 theTable.removeRow(allResultsTable.getSelectedRow());
                 System.out.println("DELETED ROW");
             }
         }else {
-            JOptionPane.showMessageDialog(rootPane, "Please select an item to delete!");
+            JOptionPane.showMessageDialog(rootPane, "Please select an item to delete!","Delete Row",2);
         }
         
         if(allResultsTable.getRowCount() <= 0) {
@@ -780,6 +740,7 @@ public class DiceRollGUI extends javax.swing.JFrame {
             deleteRowButton.setEnabled(false);
             fileButton.setEnabled(false);
             clearResultsTableButton.setEnabled(false);
+            JOptionPane.showMessageDialog(rootPane, "Results table has been cleared!","Clear Table",1);
         }
     }//GEN-LAST:event_clearResultsTableButtonActionPerformed
 
@@ -795,10 +756,10 @@ public class DiceRollGUI extends javax.swing.JFrame {
             passwordField.setEnabled(false);
             resetForLogin();
             signInStatus.setText("Signed in as: " + login.getusername());
-            JOptionPane.showMessageDialog(rootPane, "Successful Sign in!");
+            JOptionPane.showMessageDialog(rootPane, "Successful Sign in!","Sign-In",1);
         }else {
             System.out.println("Invalid Login");
-            JOptionPane.showMessageDialog(rootPane, "Invalid Sign-in, please check your credentials correctly.");
+            JOptionPane.showMessageDialog(rootPane, "Invalid Sign-in, please check your credentials correctly.","Sign-In",2);
         }
     }//GEN-LAST:event_loginButtonActionPerformed
 
@@ -816,7 +777,7 @@ public class DiceRollGUI extends javax.swing.JFrame {
         passwordField.setEnabled(true);
         resetForLogin();
         System.out.println("Signed Out");
-        JOptionPane.showMessageDialog(rootPane, "You have signed out.");
+        JOptionPane.showMessageDialog(rootPane, "You have signed out.","Sign-In",2);
     }//GEN-LAST:event_signOutButtonActionPerformed
 
     private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFieldActionPerformed
@@ -865,9 +826,9 @@ public class DiceRollGUI extends javax.swing.JFrame {
     private javax.swing.JButton clearResultsTableButton;
     private javax.swing.JButton clearTableButton;
     private javax.swing.JButton deleteRowButton;
-    private javax.swing.JTextField dice1Text;
-    private javax.swing.JTextField dice2Text;
-    private javax.swing.JTextField dice3Text;
+    private javax.swing.JLabel diceImage1;
+    private javax.swing.JLabel diceImage2;
+    private javax.swing.JLabel diceImage3;
     private javax.swing.JButton fileButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
